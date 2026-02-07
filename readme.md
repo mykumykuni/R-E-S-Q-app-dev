@@ -2,7 +2,8 @@
 
 
 # Problem Statement
-    Fire response times in Cagayan De Oro City frequently exceed the 7-minute target due to late incident reporting, reliance on manual phone hotlines, and logistical challenges.
+
+Fire response times in Cagayan De Oro City frequently exceed the 7-minute target due to late incident reporting, reliance on manual phone hotlines, and logistical challenges.
 
 
 # Target Users
