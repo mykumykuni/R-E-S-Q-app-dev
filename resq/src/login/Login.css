@@ -84,6 +84,7 @@ header p {
   border-radius: 6px;
   border: 1px solid #e2e8f0;
   background-color: #fff;
+  color: black;
   transition: all 0.2s;
 }
 
@@ -91,6 +92,16 @@ header p {
   outline: none;
   border-color: #007bff;
   box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* Fix for browser autofill text color */
+.input-group input:-webkit-autofill,
+.input-group input:-webkit-autofill:hover,
+.input-group input:-webkit-autofill:focus,
+.input-group input:-webkit-autofill:active {
+  -webkit-text-fill-color: black !important;
+  transition: background-color 5000s ease-in-out 0s;
+  /* Prevents background color change if desired, optional */
 }
 
 .login-button {
@@ -114,16 +125,18 @@ header p {
 @media (min-width: 768px) {
   .login-branding {
     display: flex;
-    flex: 1; /* Takes up 50% or so */
+    flex: 1;
+    /* Takes up 50% or so */
     max-width: 50%;
   }
 }
 
 @media (min-width: 1024px) {
   .login-branding {
-    max-width: 60%; /* More branding on larger screens */
+    max-width: 60%;
+    /* More branding on larger screens */
   }
-  
+
   .login-card {
     padding: 3rem;
   }
