@@ -8,15 +8,21 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
       e.preventDefault();
-      console.log('Login Attemted with:', { email, password});
+      console.log('Login Attempted with:', { email, password});
 	  // login logic dri 
   }
 
 
 
   return  (
-   <main className="login-container">
-      <section className= "login-card">
+   <div className="login-wrapper">
+      <div className="login-branding">
+        <h1>R-E-S-Q</h1>
+        <p>Emergency Response System</p>
+      </div>
+
+      <main className="login-container">
+        <section className= "login-card">
         <header>
           <h1>Welcome Back</h1>
           <p>Enter your details to sign in</p>
@@ -59,7 +65,8 @@ const LoginPage = () => {
         </footer> */}
       </section>
    </main>
-
-
+   </div>
   );
 };
+
+export default LoginPage;
