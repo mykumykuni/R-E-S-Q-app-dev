@@ -36,6 +36,13 @@ To run the project locally, follow these steps:
    npm run dev
    ```
 
+## Credentials
+Credentials for testing the application:
+```bash
+    - email: admin@gmail.com
+    - password: admin123
+```
+
 ## Group Members
     - Blanco, Noel Jhumel G.
     - Soria, Glenn M.
