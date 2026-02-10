@@ -6,6 +6,10 @@ import './App.css'
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+
+    // no navigate just used conditional rendering for now
+    // if setIsLoggedIn = true -> dashboard page
+    // if setIsloggedOut = false -> login page
     const handleLogin = () => {
         setIsLoggedIn(true);
     };

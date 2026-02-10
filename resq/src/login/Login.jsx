@@ -15,6 +15,7 @@ const LoginPage = ({ onLogin }) => {
     const validEmail = 'admin@gmail.com';
     const validPassword = 'admin123';
 
+    // login logic dri
     if (email === validEmail && password === validPassword) {
       console.log('Login successful');
       onLogin();
