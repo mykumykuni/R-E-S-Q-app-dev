@@ -19,7 +19,7 @@ const Dashboard = ({ onLogout }) => {
     },
     {
       id: 2,
-      title: 'Smoke Detected - Zone B',
+      title: 'Gas Detected - Zone B',
       location: 'Office Block 2',
       time: '10:45 AM',
       priority: 'medium-priority'
@@ -37,7 +37,7 @@ const Dashboard = ({ onLogout }) => {
     },
     {
       id: '#INC-002',
-      type: 'Smoke',
+      type: 'Gas',
       location: 'Zone C - Lobby',
       method: 'Camera AI',
       time: '08:30 AM',
