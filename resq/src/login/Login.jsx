@@ -12,6 +12,7 @@ const LoginPage = ({ onLogin }) => {
 
 
     // Hard coded muna credentials for presentation purposes
+    // json this one
     const validEmail = 'admin@gmail.com';
     const validPassword = 'admin123';
 
