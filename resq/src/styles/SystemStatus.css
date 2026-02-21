@@ -1,0 +1,37 @@
+/* System Status */
+.status-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.status-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.status-item:last-child {
+    border-bottom: none;
+}
+
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 10px;
+    background-color: #ccc;
+}
+
+.status-item.online .status-indicator {
+    background-color: #2ecc71;
+}
+
+.status-item.warning .status-indicator {
+    background-color: #f39c12;
+}
+
+.status-item.error .status-indicator {
+    background-color: #e74c3c;
+}

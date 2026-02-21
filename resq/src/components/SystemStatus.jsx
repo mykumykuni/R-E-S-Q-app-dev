@@ -1,3 +1,5 @@
+import '../styles/SystemStatus.css';
+
 const SystemStatus = () => {
   return (
     <section className="dashboard-section status-section">

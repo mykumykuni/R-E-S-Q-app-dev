@@ -1,3 +1,5 @@
+import '../styles/SummaryCards.css';
+
 const SummaryCards = () => {
   return (
     <section className="summary-section">

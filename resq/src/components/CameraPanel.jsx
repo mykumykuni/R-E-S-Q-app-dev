@@ -1,4 +1,5 @@
 import testVideo from '../assets/testvideo.mp4';
+import '../styles/CameraPanel.css';
 
 const CameraPanel = () => {
   return (

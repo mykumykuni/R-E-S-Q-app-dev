@@ -1,0 +1,27 @@
+/* Summary Cards */
+.summary-section {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.summary-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    flex: 1;
+    text-align: center;
+}
+
+.summary-card h3 {
+    margin: 0 0 0.5rem 0;
+    color: #7f8c8d;
+    font-size: 1rem;
+}
+
+.summary-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2980b9;
+    margin: 0;
+}

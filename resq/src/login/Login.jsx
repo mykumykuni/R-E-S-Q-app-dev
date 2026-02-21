@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Login.css';
+import usersData from '../data/users.json';
 
 
 const LoginPage = ({ onLogin }) => {
@@ -11,13 +12,13 @@ const LoginPage = ({ onLogin }) => {
     console.log('Login Attempted with:', { email, password });
 
 
-    // Hard coded muna credentials for presentation purposes
-    // json this one
-    const validEmail = 'admin@gmail.com';
-    const validPassword = 'admin123';
+    // Hard coded muna credentials for presentation purposes - now loaded from users.json
+    const adminUser = usersData.users.find(
+      user => user.email === email && user.password === password
+    );
 
     // login logic dri
-    if (email === validEmail && password === validPassword) {
+    if (adminUser) {
       console.log('Login successful');
       onLogin();
     } else {

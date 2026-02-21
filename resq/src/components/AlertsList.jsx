@@ -1,3 +1,5 @@
+import '../styles/AlertsList.css';
+
 const AlertsList = ({ alerts, onAcknowledge }) => {
   return (
     <section className="dashboard-section alerts-section">
