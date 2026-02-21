@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 
 const Header = ({ onLogout }) => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -12,10 +13,38 @@ const Header = ({ onLogout }) => {
       {/* --- NEW NAVBAR SECTION --- */}
       <nav className="header-nav">
         <ul className="nav-list">
-          <li className="nav-item active">Overview</li>
-          <li className="nav-item">Incident Map</li>
-          <li className="nav-item">Camera Feed</li>
-          <li className="nav-item">Reports</li>
+          <li>
+            <NavLink 
+              to="/overview" 
+              className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+            >
+              Overview
+            </NavLink>
+          </li>
+          <li>
+            <NavLink 
+              to="/incident-map" 
+              className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+            >
+              Incident Map
+            </NavLink>
+          </li>
+          <li>
+            <NavLink 
+              to="/camera-feed" 
+              className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+            >
+              Camera Feed
+            </NavLink>
+          </li>
+          <li>
+            <NavLink 
+              to="/reports" 
+              className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+            >
+              Reports
+            </NavLink>
+          </li>
         </ul>
       </nav>
       {/* ------------------------- */}
