@@ -58,3 +58,10 @@ Credentials for testing the application:
     - Soria, Glenn M.
     - Baltomore, Mike Nino
     - Joshua Mark Eala
+
+## Activities Done
+
+* Lab Activity No.1 Submission
+* First UI Screen Implementation
+* Component-based, Styled, and Interactive UI
+* Multi-view Frontend Application with State and Forms
