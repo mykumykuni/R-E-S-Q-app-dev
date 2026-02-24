@@ -37,6 +37,14 @@ const Header = ({ onLogout }) => {
             </NavLink>
           </li>
           <li>
+  <NavLink 
+    to="/camera-list" 
+    className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+  >
+    Camera List
+  </NavLink>
+</li>
+          <li>
             <NavLink 
               to="/reports" 
               className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}

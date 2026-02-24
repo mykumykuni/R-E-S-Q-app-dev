@@ -1,0 +1,23 @@
+[
+  {
+    "id": "CAM-001",
+    "name": "Entrance Gate",
+    "location": "Main Building",
+    "status": "online",
+    "lastActive": "2026-02-24 09:12"
+  },
+  {
+    "id": "CAM-002",
+    "name": "Parking Lot A",
+    "location": "North Wing",
+    "status": "offline",
+    "lastActive": "2026-02-24 08:47"
+  },
+  {
+    "id": "CAM-003",
+    "name": "Lobby Camera",
+    "location": "Reception",
+    "status": "online",
+    "lastActive": "2026-02-24 09:20"
+  }
+]

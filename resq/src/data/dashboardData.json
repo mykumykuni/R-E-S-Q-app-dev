@@ -21,6 +21,7 @@
       "type": "Fire",
       "location": "Zone A - North",
       "method": "Heat Sensor",
+      "date": "2026-02-20",
       "time": "09:15 AM",
       "status": "resolved"
     },
@@ -29,6 +30,7 @@
       "type": "Gas",
       "location": "Zone C - Lobby",
       "method": "Camera AI",
+      "date": "2026-02-24",
       "time": "08:30 AM",
       "status": "investigating"
     }

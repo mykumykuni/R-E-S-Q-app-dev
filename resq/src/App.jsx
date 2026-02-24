@@ -5,6 +5,7 @@ import Layout from './components/Layout'
 import Overview from './pages/Overview'
 import IncidentMap from './pages/IncidentMap'
 import CameraFeed from './pages/CameraFeed'
+import CameraList from './pages/CameraList';
 import Reports from './pages/Reports'
 import './dashboard/Dashboard.css'
 import './App.css'
@@ -45,6 +46,7 @@ function App() {
                     <Route path="/overview" element={<Overview />} />
                     <Route path="/incident-map" element={<IncidentMap />} />
                     <Route path="/camera-feed" element={<CameraFeed />} />
+                    <Route path="/camera-list" element={<CameraList />} />
                     <Route path="/reports" element={<Reports />} />
                 </Route>
             </Routes>
