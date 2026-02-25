@@ -1,17 +1,28 @@
 import { useState, useEffect } from 'react';
 import '../styles/CamerasTable.css';
+import '../styles/Modal.css';
+import '../styles/CRUDButtons.css';
 
 const CamerasTable = ({ cameras }) => {
   const [data, setData] = useState(cameras || []);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [editingId, setEditingId] = useState(null);
   const [newCamera, setNewCamera] = useState({
     name: '',
     location: '',
     status: 'online'
   });
+  const [editCamera, setEditCamera] = useState({
+    name: '',
+    location: '',
+    status: 'online'
+  });
   const [errors, setErrors] = useState({});
+  const [editErrors, setEditErrors] = useState({});
 
   // Load from props or localStorage
   useEffect(() => {
@@ -84,6 +95,71 @@ const CamerasTable = ({ cameras }) => {
     setIsAddModalOpen(false);
   };
 
+  const handleStartEdit = (cam) => {
+    setEditingId(cam.id);
+    setEditCamera({
+      name: cam.name || '',
+      location: cam.location || '',
+      status: cam.status || 'online'
+    });
+    setEditErrors({});
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdateCamera = () => {
+    const newErrors = {};
+    if (!editCamera.name.trim()) newErrors.name = 'Name is required';
+    if (!editCamera.location.trim()) newErrors.location = 'Location is required';
+    if (Object.keys(newErrors).length) {
+      setEditErrors(newErrors);
+      return;
+    }
+
+    const next = data.map((cam) => {
+      if (cam.id !== editingId) return cam;
+
+      const previousStatus = cam.status;
+      const now = new Date().toLocaleString();
+
+      if (previousStatus !== 'online' && editCamera.status === 'online') {
+        return {
+          ...cam,
+          ...editCamera,
+          lastActive: now,
+          onlineDuration: '0h 0m 0s'
+        };
+      }
+
+      return {
+        ...cam,
+        ...editCamera
+      };
+    });
+
+    setData(next);
+    setEditingId(null);
+    setIsEditModalOpen(false);
+  };
+
+  const handleDeleteCamera = () => {
+    if (!deleteTarget) return;
+    const next = data.filter((cam) => cam.id !== deleteTarget.id);
+    setData(next);
+    setDeleteTarget(null);
+  };
+
+  const closeAddModal = () => {
+    setIsAddModalOpen(false);
+    setNewCamera({ name: '', location: '', status: 'online' });
+    setErrors({});
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditingId(null);
+    setEditErrors({});
+  };
+
   const filtered = data.filter(cam => {
     const q = search.toLowerCase();
     const matchesSearch =
@@ -132,6 +208,7 @@ const CamerasTable = ({ cameras }) => {
             <th>Status</th>
             <th>Last Active</th>
             <th>Online Duration</th>
+            <th>Actions</th>
           </tr>
         </thead>
 
@@ -149,11 +226,19 @@ const CamerasTable = ({ cameras }) => {
                 </td>
                 <td>{cam.lastActive}</td>
                 <td>{cam.status === 'online' ? cam.onlineDuration : '-'}</td>
+                <td className="row-actions">
+                  <button className="btn btn-edit" onClick={() => handleStartEdit(cam)}>
+                    Edit
+                  </button>
+                  <button className="btn btn-delete" onClick={() => setDeleteTarget(cam)}>
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))
           ) : (
             <tr>
-              <td colSpan="6" className="no-results">
+              <td colSpan="7" className="no-results">
                 No cameras found.
               </td>
             </tr>
@@ -163,7 +248,7 @@ const CamerasTable = ({ cameras }) => {
 
       {/* ADD CAMERA MODAL */}
       {isAddModalOpen && (
-        <div className="modal-overlay" onClick={() => setIsAddModalOpen(false)}>
+        <div className="modal-overlay" onClick={closeAddModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h3>Add Camera</h3>
 
@@ -214,8 +299,85 @@ const CamerasTable = ({ cameras }) => {
               </button>
               <button
                 className="btn"
-                onClick={() => setIsAddModalOpen(false)}
+                onClick={closeAddModal}
               >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* EDIT CAMERA MODAL */}
+      {isEditModalOpen && (
+        <div className="modal-overlay" onClick={closeEditModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h3>Edit Camera</h3>
+
+            <div className="modal-form-grid">
+              <div className="field">
+                <label>Name</label>
+                <input
+                  value={editCamera.name}
+                  onChange={(e) =>
+                    setEditCamera({ ...editCamera, name: e.target.value })
+                  }
+                />
+                {editErrors.name && (
+                  <div className="input-error">{editErrors.name}</div>
+                )}
+              </div>
+
+              <div className="field">
+                <label>Location</label>
+                <input
+                  value={editCamera.location}
+                  onChange={(e) =>
+                    setEditCamera({ ...editCamera, location: e.target.value })
+                  }
+                />
+                {editErrors.location && (
+                  <div className="input-error">{editErrors.location}</div>
+                )}
+              </div>
+
+              <div className="field field-full">
+                <label>Status</label>
+                <select
+                  value={editCamera.status}
+                  onChange={(e) =>
+                    setEditCamera({ ...editCamera, status: e.target.value })
+                  }
+                >
+                  <option value="online">Online</option>
+                  <option value="offline">Offline</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="modal-actions">
+              <button className="btn btn-edit" onClick={handleUpdateCamera}>
+                Save
+              </button>
+              <button className="btn" onClick={closeEditModal}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* DELETE CONFIRMATION */}
+      {deleteTarget && (
+        <div className="modal-overlay" onClick={() => setDeleteTarget(null)}>
+          <div className="modal-content modal-confirm" onClick={(e) => e.stopPropagation()}>
+            <h3>Delete Camera</h3>
+            <p>Delete camera {deleteTarget.id}? This action cannot be undone.</p>
+            <div className="modal-actions">
+              <button className="btn btn-delete" onClick={handleDeleteCamera}>
+                Delete
+              </button>
+              <button className="btn" onClick={() => setDeleteTarget(null)}>
                 Cancel
               </button>
             </div>
