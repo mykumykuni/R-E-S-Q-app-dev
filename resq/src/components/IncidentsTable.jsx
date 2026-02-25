@@ -3,6 +3,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import TimePickerDropdown from './TimePickerDropdown';
 import '../styles/IncidentsTable.css';
+import '../styles/Modal.css';
+import '../styles/CRUDButtons.css';
 
 const IncidentsTable = ({ incidents, onIncidentsChange }) => {
   const [data, setData] = useState(incidents || []);
