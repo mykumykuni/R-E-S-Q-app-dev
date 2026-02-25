@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import TimePickerDropdown from './TimePickerDropdown';
 import '../styles/IncidentsTable.css';
 
 const IncidentsTable = ({ incidents, onIncidentsChange }) => {
@@ -54,6 +55,33 @@ const IncidentsTable = ({ incidents, onIncidentsChange }) => {
 
   const notifyChange = (next) => setData(next);
 
+  const formatTimeDisplay = (timeValue) => {
+    if (!timeValue) return '';
+
+    const raw = String(timeValue).trim();
+
+    const twentyFourHourMatch = raw.match(/^([01]?\d|2[0-3]):([0-5]\d)$/);
+    if (twentyFourHourMatch) {
+      const hour24 = Number(twentyFourHourMatch[1]);
+      const minute = twentyFourHourMatch[2];
+      const period = hour24 >= 12 ? 'PM' : 'AM';
+      const hour12 = hour24 % 12 || 12;
+      return `${String(hour12).padStart(2, '0')}:${minute} ${period}`;
+    }
+
+    const twelveHourMatch = raw.match(/^(\d{1,2}):([0-5]\d)\s*([AaPp][Mm])$/);
+    if (twelveHourMatch) {
+      const hour12 = Number(twelveHourMatch[1]);
+      const minute = twelveHourMatch[2];
+      const period = twelveHourMatch[3].toUpperCase();
+      if (hour12 >= 1 && hour12 <= 12) {
+        return `${String(hour12).padStart(2, '0')}:${minute} ${period}`;
+      }
+    }
+
+    return raw;
+  };
+
   const filtered = data.filter(item => {
     const q = search.toLowerCase();
     const matchesSearch =
@@ -85,7 +113,7 @@ const IncidentsTable = ({ incidents, onIncidentsChange }) => {
     if (!newIncident.type.trim()) errors.type = 'Type is required';
     if (!newIncident.location.trim()) errors.location = 'Location is required';
     if (!newIncident.method.trim()) errors.method = 'Method is required';
-    if (!newIncident.time.trim()) errors.time = 'Time is required';
+    if (!newIncident.time) errors.time = 'Time is required';
     if (!newIncident.date) errors.date = 'Date is required';
 
     if (Object.keys(errors).length) {
@@ -110,7 +138,7 @@ const IncidentsTable = ({ incidents, onIncidentsChange }) => {
     if (!editForm.type.trim()) errors.type = 'Type is required';
     if (!editForm.location.trim()) errors.location = 'Location is required';
     if (!editForm.method.trim()) errors.method = 'Method is required';
-    if (!editForm.time.trim()) errors.time = 'Time is required';
+    if (!editForm.time) errors.time = 'Time is required';
     if (!editForm.date) errors.date = 'Date is required';
 
     if (Object.keys(errors).length) {
@@ -166,7 +194,7 @@ const IncidentsTable = ({ incidents, onIncidentsChange }) => {
               <td>{item.type}</td>
               <td>{item.location}</td>
               <td>{item.method}</td>
-              <td>{item.time}</td>
+              <td>{formatTimeDisplay(item.time)}</td>
               <td>{item.date}</td>
               <td><span className={`status-badge ${item.status}`}>{item.status}</span></td>
               <td className="row-actions">
@@ -187,7 +215,14 @@ const IncidentsTable = ({ incidents, onIncidentsChange }) => {
               <div className="field"><label>Type</label><input value={newIncident.type} onChange={e => setNewIncident({...newIncident,type:e.target.value})}/>{newErrors.type && <div className="input-error">{newErrors.type}</div>}</div>
               <div className="field"><label>Location</label><input value={newIncident.location} onChange={e => setNewIncident({...newIncident,location:e.target.value})}/>{newErrors.location && <div className="input-error">{newErrors.location}</div>}</div>
               <div className="field"><label>Method</label><input value={newIncident.method} onChange={e => setNewIncident({...newIncident,method:e.target.value})}/>{newErrors.method && <div className="input-error">{newErrors.method}</div>}</div>
-              <div className="field"><label>Time</label><input value={newIncident.time} onChange={e => setNewIncident({...newIncident,time:e.target.value})}/>{newErrors.time && <div className="input-error">{newErrors.time}</div>}</div>
+              <div className="field"><label>Time</label>
+                <TimePickerDropdown
+                  value={newIncident.time}
+                  onChange={time => setNewIncident({...newIncident, time})}
+                  placeholder="Select time"
+                />
+                {newErrors.time && <div className="input-error">{newErrors.time}</div>}
+              </div>
               <div className="field"><label>Date</label>
                 <DatePicker selected={newIncident.date} onChange={date => setNewIncident({...newIncident,date})} dateFormat="yyyy-MM-dd" placeholderText="Select a date"/>
                 {newErrors.date && <div className="input-error">{newErrors.date}</div>}
@@ -210,7 +245,14 @@ const IncidentsTable = ({ incidents, onIncidentsChange }) => {
               <div className="field"><label>Type</label><input value={editForm.type} onChange={e => setEditForm({...editForm,type:e.target.value})}/>{editErrors.type && <div className="input-error">{editErrors.type}</div>}</div>
               <div className="field"><label>Location</label><input value={editForm.location} onChange={e => setEditForm({...editForm,location:e.target.value})}/>{editErrors.location && <div className="input-error">{editErrors.location}</div>}</div>
               <div className="field"><label>Method</label><input value={editForm.method} onChange={e => setEditForm({...editForm,method:e.target.value})}/>{editErrors.method && <div className="input-error">{editErrors.method}</div>}</div>
-              <div className="field"><label>Time</label><input value={editForm.time} onChange={e => setEditForm({...editForm,time:e.target.value})}/>{editErrors.time && <div className="input-error">{editErrors.time}</div>}</div>
+              <div className="field"><label>Time</label>
+                <TimePickerDropdown
+                  value={editForm.time}
+                  onChange={time => setEditForm({...editForm, time})}
+                  placeholder="Select time"
+                />
+                {editErrors.time && <div className="input-error">{editErrors.time}</div>}
+              </div>
               <div className="field"><label>Date</label>
                 <DatePicker selected={editForm.date} onChange={date => setEditForm({...editForm,date})} dateFormat="yyyy-MM-dd" placeholderText="Select a date"/>
                 {editErrors.date && <div className="input-error">{editErrors.date}</div>}

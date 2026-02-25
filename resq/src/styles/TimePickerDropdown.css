@@ -1,0 +1,121 @@
+/* ── Custom Time Picker Dropdown ── */
+.tp-dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.tp-dropdown__input {
+    width: 100%;
+    padding: 0.55rem 0.65rem;
+    border: 1px solid #d7dce3;
+    border-radius: 6px;
+    background-color: #ffffff;
+    color: #1f2937;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-size: inherit;
+    font-family: inherit;
+}
+
+.tp-dropdown__input::placeholder {
+    color: #94a3b8;
+}
+
+.tp-dropdown__input:focus {
+    outline: none;
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+}
+
+/* Dropdown panel */
+.tp-dropdown__panel {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
+    min-width: 200px;
+    background: #ffffff;
+    border: 1px solid #d7dce3;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    z-index: 1100;
+    padding: 0.4rem;
+    box-sizing: border-box;
+}
+
+.tp-dropdown__columns {
+    display: flex;
+    gap: 2px;
+}
+
+.tp-dropdown__col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.tp-dropdown__col--narrow {
+    flex: 0 0 auto;
+    min-width: 44px;
+}
+
+.tp-dropdown__col-label {
+    text-align: center;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding-bottom: 0.25rem;
+}
+
+.tp-dropdown__list {
+    display: flex;
+    flex-direction: column;
+    max-height: 170px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #d7dce3 transparent;
+}
+
+.tp-dropdown__list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.tp-dropdown__list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.tp-dropdown__list::-webkit-scrollbar-thumb {
+    background: #d7dce3;
+    border-radius: 4px;
+}
+
+.tp-dropdown__item {
+    all: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.35rem 0.25rem;
+    font-size: 0.85rem;
+    color: #1f2937;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.1s ease;
+    text-align: center;
+}
+
+.tp-dropdown__item:hover {
+    background-color: #f1f5f9;
+}
+
+.tp-dropdown__item--active {
+    background-color: #2563eb;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.tp-dropdown__item--active:hover {
+    background-color: #1d4ed8;
+}
