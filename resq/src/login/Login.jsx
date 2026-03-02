@@ -25,14 +25,14 @@ const LoginPage = ({ onLogin }) => {
       return;
     }
 
-    const adminUser = usersData.users.find(
+    const matchedUser = usersData.users.find(
       user => user.email === email && user.password === password
     );
 
     // login logic dri
-    if (adminUser) {
+    if (matchedUser) {
       console.log('Login successful');
-      onLogin();
+      onLogin(matchedUser);
     } else {
       console.log('Invalid credentials');
       alert('Invalid credentials');

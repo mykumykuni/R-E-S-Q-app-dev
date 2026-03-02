@@ -12,15 +12,28 @@ import dashboardData from './data/dashboardData.json'
 import './dashboard/Dashboard.css'
 import './App.css'
 
+const RoleRoute = ({ allowedRoles, currentRole, fallbackPath, children }) => {
+    if (!allowedRoles.includes(currentRole)) {
+        return <Navigate to={fallbackPath} replace />;
+    }
+
+    return children;
+};
+
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [currentUser, setCurrentUser] = useState(null);
     const [alerts, setAlerts] = useState(dashboardData.alerts);
 
-    const handleLogin = () => {
+    const fallbackPath = currentUser?.role === 'bfp' ? '/bfp' : '/overview';
+
+    const handleLogin = (user) => {
+        setCurrentUser(user);
         setIsLoggedIn(true);
     };
 
     const handleLogout = () => {
+        setCurrentUser(null);
         setIsLoggedIn(false);
     };
 
@@ -35,7 +48,7 @@ function App() {
                     path="/" 
                     element={
                         isLoggedIn ? (
-                            <Navigate to="/overview" replace />
+                            <Navigate to={fallbackPath} replace />
                         ) : (
                             <LoginPage onLogin={handleLogin} />
                         )
@@ -48,18 +61,65 @@ function App() {
                                 onLogout={handleLogout}
                                 alerts={alerts}
                                 onAcknowledgeAlert={handleAcknowledgeAlert}
+                                roleLabel={currentUser?.role === 'bfp' ? 'BFP' : 'Admin'}
+                                canAcknowledgeAlerts={currentUser?.role !== 'bfp'}
+                                navItems={
+                                    currentUser?.role === 'bfp'
+                                        ? []
+                                        : [
+                                            { to: '/overview', label: 'Overview' },
+                                            { to: '/camera-feed', label: 'Camera Feed' },
+                                            { to: '/camera-list', label: 'Camera List' },
+                                            { to: '/reports', label: 'Reports' },
+                                        ]
+                                }
                             />
                         ) : (
                             <Navigate to="/" replace />
                         )
                     }
                 >
-                    <Route path="/overview" element={<Overview />} />
-                    <Route path="/incident-map" element={<IncidentMap />} />
-                    <Route path="/camera-feed" element={<CameraFeed />} />
-                    <Route path="/camera-list" element={<CameraList />} />
-                    <Route path="/reports" element={<Reports />} />
-                    <Route path="/profile" element={<Profile />} />
+                    <Route
+                        path="/overview"
+                        element={
+                            <RoleRoute allowedRoles={['admin']} currentRole={currentUser?.role} fallbackPath={fallbackPath}>
+                                <Overview />
+                            </RoleRoute>
+                        }
+                    />
+                    <Route
+                        path="/camera-feed"
+                        element={
+                            <RoleRoute allowedRoles={['admin']} currentRole={currentUser?.role} fallbackPath={fallbackPath}>
+                                <CameraFeed />
+                            </RoleRoute>
+                        }
+                    />
+                    <Route
+                        path="/camera-list"
+                        element={
+                            <RoleRoute allowedRoles={['admin']} currentRole={currentUser?.role} fallbackPath={fallbackPath}>
+                                <CameraList />
+                            </RoleRoute>
+                        }
+                    />
+                    <Route
+                        path="/reports"
+                        element={
+                            <RoleRoute allowedRoles={['admin']} currentRole={currentUser?.role} fallbackPath={fallbackPath}>
+                                <Reports />
+                            </RoleRoute>
+                        }
+                    />
+                    <Route
+                        path="/bfp"
+                        element={
+                            <RoleRoute allowedRoles={['bfp']} currentRole={currentUser?.role} fallbackPath={fallbackPath}>
+                                <IncidentMap />
+                            </RoleRoute>
+                        }
+                    />
+                    <Route path="/profile" element={<Profile role={currentUser?.role} />} />
                 </Route>
             </Routes>
         </BrowserRouter>

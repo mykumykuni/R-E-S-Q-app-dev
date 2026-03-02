@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import '../styles/Profile.css';
 
-const Profile = () => {
+const Profile = ({ role = 'admin' }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -9,7 +9,7 @@ const Profile = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    const loadAdminUser = async () => {
+    const loadUser = async () => {
       try {
         const response = await fetch('/api/users');
 
@@ -18,18 +18,20 @@ const Profile = () => {
         }
 
         const usersData = await response.json();
-        const adminUser = usersData.users.find((user) => user.role === 'admin');
+        const currentUser = usersData.users.find((user) => user.role === role);
 
-        if (adminUser) {
-          setEmail(adminUser.email);
+        if (currentUser) {
+          setEmail(currentUser.email);
+        } else {
+          setError('Unable to load profile details.');
         }
       } catch {
         setError('Unable to load profile details.');
       }
     };
 
-    loadAdminUser();
-  }, []);
+    loadUser();
+  }, [role]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -42,7 +44,7 @@ const Profile = () => {
     }
 
     try {
-      const response = await fetch('/api/users/admin', {
+      const response = await fetch(`/api/users/${role}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

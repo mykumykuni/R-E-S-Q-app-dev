@@ -4,6 +4,11 @@
       "email": "admin@gmail.com",
       "password": "admin123",
       "role": "admin"
+    },
+    {
+      "email": "bfp@gmail.com",
+      "password": "bfp123",
+      "role": "bfp"
     }
   ]
 }

@@ -2,7 +2,14 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-const Header = ({ onLogout, alerts = [], onAcknowledgeAlert }) => {
+const Header = ({
+  onLogout,
+  alerts = [],
+  onAcknowledgeAlert,
+  roleLabel = 'Admin',
+  navItems = [],
+  canAcknowledgeAlerts = true,
+}) => {
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const navigate = useNavigate();
@@ -33,50 +40,22 @@ const Header = ({ onLogout, alerts = [], onAcknowledgeAlert }) => {
         <h1>R-E-S-Q Dashboard</h1>
       </div>
 
-      <nav className="header-nav">
-        <ul className="nav-list">
-          <li>
-            <NavLink 
-              to="/overview" 
-              className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-            >
-              Overview
-            </NavLink>
-          </li>
-          <li>
-            <NavLink 
-              to="/incident-map" 
-              className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-            >
-              Incident Map
-            </NavLink>
-          </li>
-          <li>
-            <NavLink 
-              to="/camera-feed" 
-              className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-            >
-              Camera Feed
-            </NavLink>
-          </li>
-          <li>
-  <NavLink 
-    to="/camera-list" 
-    className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-  >
-    Camera List
-  </NavLink>
-</li>
-          <li>
-            <NavLink 
-              to="/reports" 
-              className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
-            >
-              Reports
-            </NavLink>
-          </li>
-        </ul>
-      </nav>
+      {navItems.length > 0 && (
+        <nav className="header-nav">
+          <ul className="nav-list">
+            {navItems.map((item) => (
+              <li key={item.to}>
+                <NavLink
+                  to={item.to}
+                  className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+                >
+                  {item.label}
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
 
       <div className="header-actions">
         <div className="notifications-wrapper">
@@ -118,13 +97,15 @@ const Header = ({ onLogout, alerts = [], onAcknowledgeAlert }) => {
                       <p>{alert.location}</p>
                       <span>{alert.time}</span>
                     </div>
-                    <button
-                      type="button"
-                      className="notification-ack-btn"
-                      onClick={() => onAcknowledgeAlert(alert.id)}
-                    >
-                      Acknowledge
-                    </button>
+                    {canAcknowledgeAlerts && (
+                      <button
+                        type="button"
+                        className="notification-ack-btn"
+                        onClick={() => onAcknowledgeAlert(alert.id)}
+                      >
+                        Acknowledge
+                      </button>
+                    )}
                   </article>
                 ))
               )}
@@ -136,7 +117,7 @@ const Header = ({ onLogout, alerts = [], onAcknowledgeAlert }) => {
           className="user-profile"
           onClick={handleToggleUserDropdown}
         >
-          <span>Admin</span>
+          <span>{roleLabel}</span>
           <span className={`dropdown-icon ${showUserDropdown ? 'rotate' : ''}`}>
             ▼
           </span>
@@ -152,7 +133,7 @@ const Header = ({ onLogout, alerts = [], onAcknowledgeAlert }) => {
                   navigate('/profile');
                 }}
               >
-                Profile
+                Update Profile
               </button>
               <button
                 className="logout-btn"

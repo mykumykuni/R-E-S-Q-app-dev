@@ -26,8 +26,9 @@ const usersApiPlugin = () => ({
         return
       }
 
-      if (req.method === 'PUT' && req.url === '/api/users/admin') {
+      if (req.method === 'PUT' && req.url?.startsWith('/api/users/')) {
         let requestBody = ''
+        const role = req.url.split('/').at(-1)
 
         req.on('data', (chunk) => {
           requestBody += chunk
@@ -45,16 +46,16 @@ const usersApiPlugin = () => ({
               return
             }
 
-            const adminIndex = usersData.users.findIndex((user) => user.role === 'admin')
+            const userIndex = usersData.users.findIndex((user) => user.role === role)
 
-            if (adminIndex === -1) {
+            if (userIndex === -1) {
               res.statusCode = 404
-              res.end(JSON.stringify({ message: 'Admin user not found.' }))
+              res.end(JSON.stringify({ message: 'User not found.' }))
               return
             }
 
-            usersData.users[adminIndex] = {
-              ...usersData.users[adminIndex],
+            usersData.users[userIndex] = {
+              ...usersData.users[userIndex],
               email: payload.email,
               password: payload.password,
             }
@@ -62,7 +63,7 @@ const usersApiPlugin = () => ({
             await fs.writeFile(usersFilePath, JSON.stringify(usersData, null, 2), 'utf-8')
 
             res.setHeader('Content-Type', 'application/json')
-            res.end(JSON.stringify(usersData.users[adminIndex]))
+            res.end(JSON.stringify(usersData.users[userIndex]))
           } catch {
             res.statusCode = 500
             res.end(JSON.stringify({ message: 'Failed to update users data.' }))
