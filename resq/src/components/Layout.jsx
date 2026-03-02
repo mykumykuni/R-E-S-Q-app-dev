@@ -8,6 +8,7 @@ const Layout = ({
   alerts,
   onAcknowledgeAlert,
   roleLabel = 'Admin',
+  userAvatar = '',
   navItems = [],
   canAcknowledgeAlerts = true,
 }) => {
@@ -18,6 +19,7 @@ const Layout = ({
         alerts={alerts}
         onAcknowledgeAlert={onAcknowledgeAlert}
         roleLabel={roleLabel}
+        userAvatar={userAvatar}
         navItems={navItems}
         canAcknowledgeAlerts={canAcknowledgeAlerts}
       />

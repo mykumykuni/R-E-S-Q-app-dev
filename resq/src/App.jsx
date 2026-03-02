@@ -41,6 +41,10 @@ function App() {
         setAlerts((prev) => prev.filter((alert) => alert.id !== id));
     };
 
+    const handleUserUpdated = (updatedUser) => {
+        setCurrentUser(updatedUser);
+    };
+
     return (
         <BrowserRouter>
             <Routes>
@@ -62,6 +66,7 @@ function App() {
                                 alerts={alerts}
                                 onAcknowledgeAlert={handleAcknowledgeAlert}
                                 roleLabel={currentUser?.role === 'bfp' ? 'BFP' : 'Admin'}
+                                userAvatar={currentUser?.avatar || ''}
                                 canAcknowledgeAlerts={currentUser?.role !== 'bfp'}
                                 navItems={
                                     currentUser?.role === 'bfp'
@@ -119,7 +124,10 @@ function App() {
                             </RoleRoute>
                         }
                     />
-                    <Route path="/profile" element={<Profile role={currentUser?.role} />} />
+                    <Route
+                        path="/profile"
+                        element={<Profile role={currentUser?.role} onUserUpdated={handleUserUpdated} />}
+                    />
                 </Route>
             </Routes>
         </BrowserRouter>

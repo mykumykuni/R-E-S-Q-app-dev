@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import '../styles/Profile.css';
 
-const Profile = ({ role = 'admin' }) => {
+const Profile = ({ role = 'admin', onUserUpdated }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [avatar, setAvatar] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
@@ -22,6 +23,7 @@ const Profile = ({ role = 'admin' }) => {
 
         if (currentUser) {
           setEmail(currentUser.email);
+          setAvatar(currentUser.avatar || '');
         } else {
           setError('Unable to load profile details.');
         }
@@ -38,9 +40,18 @@ const Profile = ({ role = 'admin' }) => {
     setMessage('');
     setError('');
 
-    if (password !== confirmPassword) {
+    if ((password || confirmPassword) && password !== confirmPassword) {
       setError('Password and Confirm Password must match.');
       return;
+    }
+
+    const payload = {
+      email,
+      avatar,
+    };
+
+    if (password) {
+      payload.password = password;
     }
 
     try {
@@ -49,11 +60,17 @@ const Profile = ({ role = 'admin' }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
         throw new Error('Failed to update profile');
+      }
+
+      const updatedUser = await response.json();
+
+      if (onUserUpdated) {
+        onUserUpdated(updatedUser);
       }
     } catch {
       setError('Failed to update account details. Please try again.');
@@ -65,11 +82,53 @@ const Profile = ({ role = 'admin' }) => {
     setConfirmPassword('');
   };
 
+  const handleAvatarChange = (event) => {
+    const selectedFile = event.target.files?.[0];
+
+    if (!selectedFile) {
+      return;
+    }
+
+    if (!selectedFile.type.startsWith('image/')) {
+      setError('Please select a valid image file.');
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const result = typeof reader.result === 'string' ? reader.result : '';
+      setAvatar(result);
+    };
+
+    reader.readAsDataURL(selectedFile);
+  };
+
   return (
     <section className="dashboard-section profile-section">
       <h2>Profile Settings</h2>
 
       <form className="profile-form" onSubmit={handleSubmit}>
+        <div className="profile-avatar-section">
+          {avatar ? (
+            <img src={avatar} alt="Profile avatar" className="profile-avatar-preview" />
+          ) : (
+            <div className="profile-avatar-preview profile-avatar-placeholder" aria-hidden="true">
+              {role.toUpperCase().charAt(0)}
+            </div>
+          )}
+
+          <label htmlFor="profile-avatar" className="profile-avatar-label">
+            Upload Avatar
+          </label>
+          <input
+            id="profile-avatar"
+            type="file"
+            accept="image/*"
+            onChange={handleAvatarChange}
+          />
+        </div>
+
         <div className="profile-input-group">
           <label htmlFor="profile-email">Email</label>
           <input
@@ -89,7 +148,6 @@ const Profile = ({ role = 'admin' }) => {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             placeholder="Enter new password"
-            required
           />
         </div>
 
@@ -101,7 +159,6 @@ const Profile = ({ role = 'admin' }) => {
             value={confirmPassword}
             onChange={(event) => setConfirmPassword(event.target.value)}
             placeholder="Re-enter new password"
-            required
           />
         </div>
 

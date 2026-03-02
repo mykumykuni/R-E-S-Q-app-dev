@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import '../styles/Header.css';
 
 const Header = ({
   onLogout,
   alerts = [],
   onAcknowledgeAlert,
   roleLabel = 'Admin',
+  userAvatar = '',
   navItems = [],
   canAcknowledgeAlerts = true,
 }) => {
@@ -117,6 +119,13 @@ const Header = ({
           className="user-profile"
           onClick={handleToggleUserDropdown}
         >
+          {userAvatar ? (
+            <img className="user-avatar" src={userAvatar} alt={`${roleLabel} avatar`} />
+          ) : (
+            <div className="user-avatar user-avatar-fallback" aria-hidden="true">
+              {roleLabel.charAt(0)}
+            </div>
+          )}
           <span>{roleLabel}</span>
           <span className={`dropdown-icon ${showUserDropdown ? 'rotate' : ''}`}>
             ▼
