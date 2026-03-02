@@ -1,0 +1,82 @@
+.profile-section {
+  max-width: 560px;
+  width: 100%;
+  margin: 2rem auto; /* Centers the section and adds vertical spacing */
+  align-self: center; /* Ensures it is centered in the flex container */
+}
+
+.profile-section h2 {
+  color: #1a252f;
+  font-weight: 700;
+  text-align: center; /* Centers the header text for better aesthetics */
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem; /* slightly larger gap */
+}
+
+.profile-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profile-input-group label {
+  font-size: 0.95rem;
+  color: #1a252f; /* Much darker color for better contrast */
+  font-weight: 700; /* Bolder label text */
+}
+
+.profile-input-group input {
+  border: 1px solid #7f8c8d; /* Darker border for higher contrast */
+  border-radius: 6px;
+  padding: 0.75rem 0.8rem;
+  font-size: 1rem;
+  color: #2c3e50; /* Darker text inside input */
+  background-color: #ffffff;
+}
+
+.profile-input-group input:focus {
+  outline: none;
+  border-color: #2980b9; /* Darker focus border */
+  box-shadow: 0 0 0 2px rgba(41, 128, 185, 0.2);
+}
+
+.profile-input-group input::placeholder {
+  color: #7f8c8d; /* Higher contrast for placeholder text */
+  opacity: 1; /* Override Firefox's lower opacity */
+}
+
+.profile-error {
+  margin: 0;
+  color: #c0392b; /* Darker red */
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.profile-success {
+  margin: 0;
+  color: #27ae60; /* Darker green */
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.profile-save-btn {
+  width: 100%;
+  margin-top: 1rem;
+  background-color: #2980b9; /* Darker blue */
+  color: #ffffff;
+  border: none;
+  padding: 0.85rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.profile-save-btn:hover {
+  background-color: #1f618d; /* Even darker blue for hover */
+}

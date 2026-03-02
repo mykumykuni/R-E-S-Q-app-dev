@@ -1,18 +1,30 @@
 import React, { useState } from 'react';
 import './Login.css';
-import usersData from '../data/users.json';
 
 
 const LoginPage = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Login Attempted with:', { email, password });
 
+    let usersData;
 
-    // Hard coded muna credentials for presentation purposes - now loaded from users.json
+    try {
+      const response = await fetch('/api/users');
+
+      if (!response.ok) {
+        throw new Error('Failed to load users');
+      }
+
+      usersData = await response.json();
+    } catch {
+      alert('Unable to verify credentials right now. Please try again.');
+      return;
+    }
+
     const adminUser = usersData.users.find(
       user => user.email === email && user.password === password
     );
@@ -25,7 +37,7 @@ const LoginPage = ({ onLogin }) => {
       console.log('Invalid credentials');
       alert('Invalid credentials');
     }
-  }
+  };
 
   return (
     <div className="login-wrapper">

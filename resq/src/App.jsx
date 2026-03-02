@@ -7,11 +7,14 @@ import IncidentMap from './pages/IncidentMap'
 import CameraFeed from './pages/CameraFeed'
 import CameraList from './pages/CameraList';
 import Reports from './pages/Reports'
+import Profile from './pages/Profile'
+import dashboardData from './data/dashboardData.json'
 import './dashboard/Dashboard.css'
 import './App.css'
 
 function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [alerts, setAlerts] = useState(dashboardData.alerts);
 
     const handleLogin = () => {
         setIsLoggedIn(true);
@@ -19,6 +22,10 @@ function App() {
 
     const handleLogout = () => {
         setIsLoggedIn(false);
+    };
+
+    const handleAcknowledgeAlert = (id) => {
+        setAlerts((prev) => prev.filter((alert) => alert.id !== id));
     };
 
     return (
@@ -37,7 +44,11 @@ function App() {
                 <Route 
                     element={
                         isLoggedIn ? (
-                            <Layout onLogout={handleLogout} />
+                            <Layout
+                                onLogout={handleLogout}
+                                alerts={alerts}
+                                onAcknowledgeAlert={handleAcknowledgeAlert}
+                            />
                         ) : (
                             <Navigate to="/" replace />
                         )
@@ -48,6 +59,7 @@ function App() {
                     <Route path="/camera-feed" element={<CameraFeed />} />
                     <Route path="/camera-list" element={<CameraList />} />
                     <Route path="/reports" element={<Reports />} />
+                    <Route path="/profile" element={<Profile />} />
                 </Route>
             </Routes>
         </BrowserRouter>
