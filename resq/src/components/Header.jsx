@@ -103,7 +103,11 @@ const Header = ({
                       <button
                         type="button"
                         className="notification-ack-btn"
-                        onClick={() => onAcknowledgeAlert(alert.id)}
+                        onClick={() => {
+                          onAcknowledgeAlert(alert.id);
+                          setShowNotifications(false);
+                          navigate('/camera-feed');
+                        }}
                       >
                         Acknowledge
                       </button>
