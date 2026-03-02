@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Login.css';
+import fallbackUsersData from '../data/users.json';
 
 
 const LoginPage = ({ onLogin }) => {
@@ -10,7 +11,7 @@ const LoginPage = ({ onLogin }) => {
     e.preventDefault();
     console.log('Login Attempted with:', { email, password });
 
-    let usersData;
+    let usersData = fallbackUsersData;
 
     try {
       const response = await fetch('/api/users');
@@ -21,12 +22,11 @@ const LoginPage = ({ onLogin }) => {
 
       usersData = await response.json();
     } catch {
-      alert('Unable to verify credentials right now. Please try again.');
-      return;
+      console.warn('Falling back to local users data for login validation.');
     }
 
     const matchedUser = usersData.users.find(
-      user => user.email === email && user.password === password
+      user => user.email.toLowerCase() === email.trim().toLowerCase() && user.password === password
     );
 
     // login logic dri
